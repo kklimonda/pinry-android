@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pinry</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="url">Pinry URL</string>
+    <string name="login_label">Pinry Login information</string>
+</resources>

@@ -21,13 +21,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity"
-                  android:label="@string/login_label">
+                  android:label="@string/login_label"
+                  android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <service android:name=".PinryAuthenticatorService"
-                 android:exported="true" android:process=":auth">
+                 android:exported="false" android:process=":auth">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>

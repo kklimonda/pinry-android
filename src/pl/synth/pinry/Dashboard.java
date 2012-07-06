@@ -1,10 +1,12 @@
 package pl.synth.pinry;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
+import android.accounts.*;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.io.IOException;
 
 public class Dashboard extends Activity {
     private static final String TAG = "Dashboard";
@@ -15,10 +17,24 @@ public class Dashboard extends Activity {
         AccountManager manager = AccountManager.get(this);
         Account[] accounts = manager.getAccountsByType("pl.synth.pinry.account");
 
-        Log.d(TAG, "force account creation");
-        for (Account account : accounts) {
-            manager.removeAccount(account, null, null);
+        if (accounts.length == 0) {
+            manager.addAccount("pl.synth.pinry.account", null, null, null, this, new AccountManagerCallback<Bundle>() {
+                @Override
+                public void run(AccountManagerFuture<Bundle> future) {
+                    try {
+                        Bundle result = future.getResult();
+                        Intent i = (Intent) result.get(AccountManager.KEY_INTENT);
+                        startActivity(Dashboard.this.getIntent());
+                    } catch (OperationCanceledException e) {
+                        Log.d(TAG, "addAccount raised OperationCancelledException: " + e.getMessage());
+                    } catch (IOException e) {
+                        Log.d(TAG, "addAccount raised IOException: " + e.getMessage());
+                    } catch (AuthenticatorException e) {
+                        Log.d(TAG, "addAccount raised AuthenticatorException: " + e.getMessage());
+                    }
+                }
+            }, null);
+            finish();
         }
-        manager.addAccount("pl.synth.pinry.account", null, null, null, this, null, null);
     }
 }

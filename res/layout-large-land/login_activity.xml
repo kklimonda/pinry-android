@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dip"
                     android:id="@+id/loginButton"
-                    android:text="Login" />
+                    android:text="@string/sign_in_text" />
         </TableRow>
     </TableLayout>
 

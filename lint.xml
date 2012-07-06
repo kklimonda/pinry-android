@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Ignore the UselessParent for tablet layouts, where
+         TableLayout is put inside ListLayout so we can scale interface
+         properly. -->
+    <issue id="UselessParent">
+        <ignore path="res/layout-large-port/login_activity.xml" />
+        <ignore path="res/layout-large-land/login_activity.xml" />
+    </issue>
+</lint>
+

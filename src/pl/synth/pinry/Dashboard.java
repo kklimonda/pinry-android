@@ -14,10 +14,11 @@ public class Dashboard extends Activity {
 
         AccountManager manager = AccountManager.get(this);
         Account[] accounts = manager.getAccountsByType("pl.synth.pinry.account");
+
+        Log.d(TAG, "force account creation");
         for (Account account : accounts) {
             manager.removeAccount(account, null, null);
         }
-        Log.d(TAG, "force account creation");
         manager.addAccount("pl.synth.pinry.account", null, null, null, this, null, null);
     }
 }

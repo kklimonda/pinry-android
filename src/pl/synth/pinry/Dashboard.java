@@ -2,6 +2,7 @@ package pl.synth.pinry;
 
 import android.accounts.*;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,11 @@ public class Dashboard extends Activity {
                 }
             }, null);
             finish();
+            return;
         }
+
+        Account account = accounts[0];
+
+        ContentResolver.setSyncAutomatically(account, "pl.synth.pinry.pins", true);
     }
 }

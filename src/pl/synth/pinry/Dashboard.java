@@ -37,6 +37,8 @@ public class Dashboard extends Activity {
             }, null);
             finish();
             return;
+        } else if (accounts.length > 1) {
+            Log.d(TAG, "More than one Pinry account and we don't support that yet. Choosing the first one");
         }
 
         Account account = accounts[0];

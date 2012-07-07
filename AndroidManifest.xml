@@ -21,8 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity"
-                  android:label="@string/login_label"
-                  android:exported="false">
+                  android:label="@string/login_label">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>

@@ -12,14 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AccountAuthenticatorActivity {
     EditText urlText;
@@ -85,20 +90,15 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             String user = params[1];
             String password = params[2];
 
-            URI api_url;
-            if (!url.endsWith("api/")) {
-                url += url.endsWith("/") ? "api/" : "/api/";
-            }
-            url += "pin/?format=json";
-
-            try {
-                api_url = new URI(url);
-            } catch (URISyntaxException e) {
-                return false;
-            }
+            String api_url = url + "/api/pin/";
 
             String responseString;
             try {
+                List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
+                urlParams.add(new BasicNameValuePair("format", "json"));
+                String paramString = URLEncodedUtils.format(urlParams, "utf-8");
+                api_url += "?" + paramString;
+
                 HttpGet request = new HttpGet(api_url);
                 client = new DefaultHttpClient();
                 HttpResponse response = client.execute(request);

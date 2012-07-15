@@ -7,13 +7,10 @@ import android.app.Service;
 import android.content.*;
 import android.database.Cursor;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PinSyncAdapterService extends Service {
     private static final String TAG = "PinSyncAdapterService";
@@ -53,7 +50,6 @@ public class PinSyncAdapterService extends Service {
         ContentResolver contentResolver = context.getContentResolver();
         AccountManager manager = AccountManager.get(context);
         String url = manager.getUserData(account, "url");
-        Log.i(TAG, "performSync: " + account.toString() + " (url: " + url + ")");
         NetworkClient client = new NetworkClient(url, context);
         ArrayList<Pin> newPins = client.getPinsSince(0L);
 

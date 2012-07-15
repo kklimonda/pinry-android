@@ -38,5 +38,17 @@
             <meta-data android:name="android.accounts.AccountAuthenticator"
                        android:resource="@xml/authenticator" />
         </service>
+        <service android:name=".PinSyncAdapterService">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                       android:resource="@xml/sync_pins" />
+        </service>
+        <provider android:syncable="true"
+                  android:label="PinryProvider"
+                  android:exported="false"
+                  android:name=".PinryContentProvider"
+                  android:authorities="pl.synth.pinry.pins" />
     </application>
 </manifest>

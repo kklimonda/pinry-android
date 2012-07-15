@@ -64,6 +64,8 @@ public class PinSyncAdapterService extends Service {
                 c.moveToFirst();
                 c.close();
                 continue;
+            } else {
+                c.close();
             }
 
             values.put(Pinry.Pins._ID, pin.getId());

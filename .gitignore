@@ -20,4 +20,4 @@ proguard-project.txt
 
 .idea/
 
-Pinry.iml
+*.iml

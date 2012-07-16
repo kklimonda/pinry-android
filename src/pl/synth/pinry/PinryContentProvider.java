@@ -132,7 +132,7 @@ public class PinryContentProvider extends ContentProvider {
         if (rowId > 0) {
             Uri pinUri = ContentUris.withAppendedId(Pinry.Pins.CONTENT_ID_URI_BASE, rowId);
             getContext().getContentResolver().notifyChange(pinUri, null);
-            if (values.getAsString("synced") != Pinry.Pins.SyncState.SYNCED) {
+            if (values.getAsString(Pinry.Pins.COLUMN_NAME_SYNC_STATE) != Pinry.Pins.SyncState.SYNCED) {
                 ContentResolver.requestSync(null, Pinry.AUTHORITY, new Bundle());
             }
             return pinUri;

@@ -1,9 +1,6 @@
 package pl.synth.pinry;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.nfc.Tag;
 import android.util.Log;
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
@@ -21,11 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.net.HttpCookie;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 class NetworkClient {
@@ -99,12 +92,10 @@ class NetworkClient {
             for(int i = 0; i < totalCount; i++) {
                 JSONObject object = objects.getJSONObject(i);
                 String imagePath = object.getString("image");
-                String thumbnailPath;
                 String localPath;
                 int pinId = object.getInt("id");
                 try {
                     localPath = fetchImage(imagePath, pinId);
-                    thumbnailPath = processImage(localPath);
                 } catch (IOException e) {
                     Log.e(TAG, "fetchAndProcessImage failed: " + e.getMessage());
                     continue;
@@ -115,7 +106,7 @@ class NetworkClient {
                 int id = object.getInt("id");
                 long publishedDate = 0L;
 
-                Pin pin = new Pin(id, sourceUrl, localPath, thumbnailPath, description, url, publishedDate);
+                Pin pin = new Pin(this.context, id, sourceUrl, localPath, description, url, publishedDate);
 
                 returnList.add(pin);
             }
@@ -126,72 +117,10 @@ class NetworkClient {
         return returnList;
     }
 
-    private String processImage(String localPath) {
-        String fileName = last(localPath.split("/"));
-        File thumbnailPath = context.getExternalFilesDir("thumbnails");
-        File thumbnailFile = new File(thumbnailPath, fileName);
-
-        if (thumbnailFile.exists()) {
-            return thumbnailFile.getAbsolutePath();
-        }
-
-        final int IMAGE_MAX_SIZE = 200000;
-        /* first just get the image size */
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(localPath, opts);
-
-
-        int scale = 1;
-        while ((opts.outWidth * opts.outHeight) * (1 / Math.pow(scale, 2)) > IMAGE_MAX_SIZE) {
-                scale *= 2;
-        }
-
-        Bitmap thumbnail;
-        if (scale > 1) {
-            scale--;
-            opts = new BitmapFactory.Options();
-            opts.inSampleSize = scale;
-            thumbnail = BitmapFactory.decodeFile(localPath, opts);
-
-            int width = thumbnail.getWidth();
-            int height = thumbnail.getHeight();
-
-            double y = Math.sqrt(IMAGE_MAX_SIZE / (((double) width) / height));
-            double x = (y / height) * width;
-
-            thumbnail = Bitmap.createScaledBitmap(thumbnail, (int) x, (int) y, true);
-
-            Bitmap.CompressFormat compress;
-            compress = Bitmap.CompressFormat.JPEG;
-
-            if(opts.outMimeType == "image/png") {
-                compress = Bitmap.CompressFormat.PNG;
-            } else if (opts.outMimeType == "image/jpeg") {
-                compress = Bitmap.CompressFormat.JPEG;
-            }
-
-            try {
-                OutputStream out = new FileOutputStream(thumbnailFile.getAbsolutePath());
-                thumbnail.compress(compress, 90, out);
-            } catch (FileNotFoundException e) {
-                Log.e(TAG, "Could not save thumbnail: "+ e.getMessage());
-                return null;
-            }
-            return thumbnailFile.getAbsolutePath();
-        }
-
-        return localPath;
-    }
-
-    private static <T> T last(T[] array) {
-        return array[array.length - 1];
-    }
-
     private String fetchImage(String imagePath, int pinId) throws IOException {
         HttpClient client = getHttpClient();
 
-        String remoteFileName = last(imagePath.split("/"));
+        String remoteFileName = Tools.last(imagePath.split("/"));
         File path = context.getExternalFilesDir(null);
 
         String[] tokens = remoteFileName.split("\\.(?=[^\\.]+$)");

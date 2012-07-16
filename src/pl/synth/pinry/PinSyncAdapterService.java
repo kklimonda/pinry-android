@@ -56,12 +56,10 @@ public class PinSyncAdapterService extends Service {
                 Uri uri = ContentUris.withAppendedId(Pinry.Pins.CONTENT_ID_URI_BASE, pin.getId());
                 Cursor c = contentResolver.query(uri, new String[]{Pinry.Pins._ID, Pinry.Pins.COLUMN_NAME_IMAGE_PATH}, null, null, null);
                 if (c.getCount() > 0) {
-                    c.moveToFirst();
                     c.close();
                     continue;
-                } else {
-                    c.close();
                 }
+                c.close();
 
                 values.put(Pinry.Pins._ID, pin.getId());
                 values.put(Pinry.Pins.COLUMN_NAME_IMAGE_PATH, pin.getLocalPath());

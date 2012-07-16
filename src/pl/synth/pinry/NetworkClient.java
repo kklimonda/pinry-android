@@ -69,7 +69,9 @@ class NetworkClient {
         JSONObject json;
         try {
             HttpResponse httpResponse = client.execute(request);
-            if (httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            if (statusCode != HttpStatus.SC_OK) {
+                Log.e(TAG, "Unexpected status code. Expected 200, got " + statusCode);
                 return returnList;
             }
 
@@ -78,11 +80,16 @@ class NetworkClient {
         } catch (IOException e) {
             return returnList;
         } catch (JSONException e) {
+            Log.e(TAG, "Could not parse the JSON response: " + e.getMessage());
             return returnList;
         }
 
+        /* every proper API response contains the meta object, so we can check for its existence and decide whether
+           the server returned correct response.
+          */
         if(!json.has("meta")) {
-            return null;
+            Log.e(TAG, "Server returned unexpected response. Bailing out.");
+            return returnList;
         }
 
         try {
@@ -111,7 +118,7 @@ class NetworkClient {
                 returnList.add(pin);
             }
         } catch (JSONException e) {
-            return null;
+            return returnList;
         }
 
         return returnList;

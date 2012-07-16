@@ -56,9 +56,7 @@ class NetworkClient {
         ArrayList<Pin> returnList = new ArrayList<Pin>();
         HttpClient client = new DefaultHttpClient();
         String url = baseUrl;
-        url += "/api/pin";
-
-        Log.i(TAG, "getPinsSince " + epoch);
+        url += "/api/pin/";
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("format", "json"));

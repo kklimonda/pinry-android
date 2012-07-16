@@ -2,7 +2,9 @@ package pl.synth.pinry;
 
 import android.content.Context;
 import android.util.Log;
-import org.apache.http.*;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -17,7 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,16 +45,6 @@ class NetworkClient {
     public NetworkClient(String url, Context context) {
         this.context = context;
         this.baseUrl = url;
-    }
-
-    /**
-     * Connects to the Pinry server and authenticates using given credentials
-     * @param username The pinry username
-     * @param password The pinry password
-     * @return whether authentication was successful
-     */
-    public boolean authenticate(String username, String password) {
-        return false;
     }
 
     public ArrayList<Pin> getPinsSince(String lastKnownUpdate) {
@@ -88,7 +83,7 @@ class NetworkClient {
         /* every proper API response contains the meta object, so we can check for its existence and decide whether
            the server returned correct response.
           */
-        if(!json.has("meta")) {
+        if (!json.has("meta")) {
             Log.e(TAG, "Server returned unexpected response. Bailing out.");
             return returnList;
         }
@@ -97,7 +92,7 @@ class NetworkClient {
             int totalCount = json.getJSONObject("meta").getInt("total_count");
             JSONArray objects = json.getJSONArray("objects");
 
-            for(int i = 0; i < totalCount; i++) {
+            for (int i = 0; i < totalCount; i++) {
                 JSONObject object = objects.getJSONObject(i);
                 String imagePath = object.getString("image");
                 String localPath;
@@ -114,7 +109,7 @@ class NetworkClient {
                 String sourceUrl = object.getString("url");
                 String publishedDate = object.getString("published");
 
-                Pin pin = new Pin(this.context, id, sourceUrl, localPath, description, url, publishedDate);
+                Pin pin = new Pin(this.context, id, sourceUrl, localPath, description, publishedDate);
 
                 returnList.add(pin);
             }

@@ -1,9 +1,7 @@
 package pl.synth.pinry;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.os.Bundle;
-import android.widget.ListView;
 
 public class Dashboard extends Activity {
     @Override

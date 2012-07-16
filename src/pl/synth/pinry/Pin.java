@@ -19,16 +19,14 @@ class Pin {
     private String sourceUrl;
     private String thumbnailPath;
     private String description;
-    private String imageUrl;
     private String publishedDate;
 
-    public Pin(Context context, int id, String sourceUrl, String localPath, String description, String imageUrl, String publishedDate) {
+    public Pin(Context context, int id, String sourceUrl, String localPath, String description, String publishedDate) {
         this.context = context;
         this.id = id;
         this.sourceUrl = sourceUrl;
         this.localPath = localPath;
         this.description = description;
-        this.imageUrl = imageUrl;
         this.publishedDate = publishedDate;
 
         processImage();
@@ -52,10 +50,6 @@ class Pin {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
     }
 
     public String getPublishedDate() {
@@ -102,7 +96,7 @@ class Pin {
             Bitmap.CompressFormat compress;
             compress = Bitmap.CompressFormat.JPEG;
 
-            if(opts.outMimeType == "image/png") {
+            if (opts.outMimeType == "image/png") {
                 compress = Bitmap.CompressFormat.PNG;
             } else if (opts.outMimeType == "image/jpeg") {
                 compress = Bitmap.CompressFormat.JPEG;

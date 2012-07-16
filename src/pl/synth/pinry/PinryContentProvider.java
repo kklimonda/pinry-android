@@ -1,6 +1,5 @@
 package pl.synth.pinry;
 
-import android.accounts.Account;
 import android.content.*;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -13,8 +12,6 @@ import android.os.Bundle;
 import java.util.HashMap;
 
 public class PinryContentProvider extends ContentProvider {
-    private static final String TAG = "PinryContentProvider";
-
     private static final String DATABASE_NAME = "pinry.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -57,7 +54,7 @@ public class PinryContentProvider extends ContentProvider {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(Pinry.Pins.TABLE_NAME);
 
-        switch(uriMatcher.match(uri)) {
+        switch (uriMatcher.match(uri)) {
             case PINS:
                 queryBuilder.setProjectionMap(pinsProjectionMap);
                 break;
@@ -161,15 +158,15 @@ public class PinryContentProvider extends ContentProvider {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("CREATE TABLE " + Pinry.Pins.TABLE_NAME + " ("
-                + Pinry.Pins._ID + " INTEGER PRIMARY KEY,"
-                + Pinry.Pins.COLUMN_NAME_SOURCE_URL + " TEXT,"
-                + Pinry.Pins.COLUMN_NAME_PUBLISHED + " INTEGER,"
-                + Pinry.Pins.COLUMN_NAME_DESCRIPTION + " TEXT,"
-                + Pinry.Pins.COLUMN_NAME_IMAGE_PATH + " TEXT,"
-                + Pinry.Pins.COLUMN_NAME_IMAGE_URL + " TEXT,"
-                + Pinry.Pins.COLUMN_NAME_THUMBNAIL_PATH + " TEXT,"
-                + Pinry.Pins.COLUMN_NAME_SYNC_STATE + " TEXT"
-                + ");");
+                    + Pinry.Pins._ID + " INTEGER PRIMARY KEY,"
+                    + Pinry.Pins.COLUMN_NAME_SOURCE_URL + " TEXT,"
+                    + Pinry.Pins.COLUMN_NAME_PUBLISHED + " INTEGER,"
+                    + Pinry.Pins.COLUMN_NAME_DESCRIPTION + " TEXT,"
+                    + Pinry.Pins.COLUMN_NAME_IMAGE_PATH + " TEXT,"
+                    + Pinry.Pins.COLUMN_NAME_IMAGE_URL + " TEXT,"
+                    + Pinry.Pins.COLUMN_NAME_THUMBNAIL_PATH + " TEXT,"
+                    + Pinry.Pins.COLUMN_NAME_SYNC_STATE + " TEXT"
+                    + ");");
         }
 
         @Override

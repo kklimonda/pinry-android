@@ -1,6 +1,9 @@
 package pl.synth.pinry;
 
-import android.accounts.*;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -9,15 +12,14 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import java.io.IOException;
-
 public class Pinry extends Activity {
     private static final String TAG = "Pinry";
 
     public static final String AUTHORITY = "pl.synth.pinry.pins";
 
     public static final class Pins implements BaseColumns {
-        private Pins() {}
+        private Pins() {
+        }
 
         public static final String TABLE_NAME = "pins";
 
@@ -45,7 +47,6 @@ public class Pinry extends Activity {
 
         public static final class SyncState {
             public static final String WAITING = "waiting";
-            public static final String TRANSIT = "transit";
             public static final String SYNCED = "synced";
         }
 
@@ -62,18 +63,8 @@ public class Pinry extends Activity {
             manager.addAccount("pl.synth.pinry.account", null, null, null, this, new AccountManagerCallback<Bundle>() {
                 @Override
                 public void run(AccountManagerFuture<Bundle> future) {
-                    try {
-
-                        Bundle result = future.getResult();
-                        Intent i = new Intent(Pinry.this, Pinry.class);
-                        startActivity(i);
-                    } catch (OperationCanceledException e) {
-                        Log.d(TAG, "addAccount raised OperationCancelledException: " + e.getMessage());
-                    } catch (IOException e) {
-                        Log.d(TAG, "addAccount raised IOException: " + e.getMessage());
-                    } catch (AuthenticatorException e) {
-                        Log.d(TAG, "addAccount raised AuthenticatorException: " + e.getMessage());
-                    }
+                    Intent i = new Intent(Pinry.this, Pinry.class);
+                    startActivity(i);
                 }
             }, null);
             finish();

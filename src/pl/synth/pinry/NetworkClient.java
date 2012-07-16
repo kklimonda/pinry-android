@@ -52,7 +52,7 @@ class NetworkClient {
         return false;
     }
 
-    public ArrayList<Pin> getPinsSince(Long epoch) {
+    public ArrayList<Pin> getPinsSince(String lastKnownUpdate) {
         ArrayList<Pin> returnList = new ArrayList<Pin>();
         HttpClient client = new DefaultHttpClient();
         String url = baseUrl;
@@ -62,6 +62,9 @@ class NetworkClient {
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("format", "json"));
+        if (lastKnownUpdate != null && lastKnownUpdate.length() > 0) {
+            params.add(new BasicNameValuePair("published__gt", lastKnownUpdate));
+        }
         String paramString = URLEncodedUtils.format(params, "utf-8");
         url += "?" + paramString;
 
@@ -108,10 +111,10 @@ class NetworkClient {
                     continue;
                 }
 
+                int id = object.getInt("id");
                 String description = object.getString("description");
                 String sourceUrl = object.getString("url");
-                int id = object.getInt("id");
-                long publishedDate = 0L;
+                String publishedDate = object.getString("published");
 
                 Pin pin = new Pin(this.context, id, sourceUrl, localPath, description, url, publishedDate);
 

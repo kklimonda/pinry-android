@@ -27,12 +27,26 @@ public class PinSyncAdapterService extends Service {
             this.context = context;
         }
 
+        private String getLastKnownUpdate() {
+            ContentResolver contentResolver = context.getContentResolver();
+            String sortOrder = "published DESC LIMIT 1";
+            Cursor c = contentResolver.query(Pinry.Pins.CONTENT_URI, new String[] {Pinry.Pins.COLUMN_NAME_PUBLISHED}, null, null, sortOrder);
+            if (c.getCount() == 0 ) {
+                /* We have no images stored locally, so don't limit the API call to the images created after some date. */
+                return null;
+            }
+
+            c.moveToFirst();
+            return c.getString(c.getColumnIndex("published"));
+        }
+
         private void pullUpdates(Account account) {
             ContentResolver contentResolver = context.getContentResolver();
             AccountManager manager = AccountManager.get(context);
             String url = manager.getUserData(account, "url");
             NetworkClient client = new NetworkClient(url, context);
-            ArrayList<Pin> newPins = client.getPinsSince(0L);
+
+            ArrayList<Pin> newPins = client.getPinsSince(getLastKnownUpdate());
 
             ContentValues values = new ContentValues();
 

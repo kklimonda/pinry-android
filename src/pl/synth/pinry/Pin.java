@@ -20,9 +20,9 @@ class Pin {
     private String thumbnailPath;
     private String description;
     private String imageUrl;
-    private long publishedDate;
+    private String publishedDate;
 
-    public Pin(Context context, int id, String sourceUrl, String localPath, String description, String imageUrl, long publishedDate) {
+    public Pin(Context context, int id, String sourceUrl, String localPath, String description, String imageUrl, String publishedDate) {
         this.context = context;
         this.id = id;
         this.sourceUrl = sourceUrl;
@@ -58,7 +58,7 @@ class Pin {
         return imageUrl;
     }
 
-    public long getPublishedDate() {
+    public String getPublishedDate() {
         return publishedDate;
     }
 
